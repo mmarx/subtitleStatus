@@ -71,6 +71,7 @@ andi-temp/*
 # Credentials files
 credentials.py
 
+
 # Stuff
 temp.py
 test.py
@@ -79,3 +80,7 @@ subtitles.png
 
 #PyCharm
 .idea/
+
+# temporaries
+*~
+flycheck_*.py
