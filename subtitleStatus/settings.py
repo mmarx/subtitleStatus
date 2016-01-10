@@ -31,6 +31,8 @@ TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = ['subtitles.media.ccc.de']
 
+# Redirect after login
+LOGIN_REDIRECT_URL = '/'
 
 # Application definition
 
