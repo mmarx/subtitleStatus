@@ -2,7 +2,7 @@ django < 1.8
 django-bootstrap-form
 django-extensions
 git+https://github.com/mmarx/django-urlauth.git@fix-simplejson#egg=django-urlauth
-git+https://github.com/mmarx/django-account.git@fix-views#egg=django-account
+git+https://github.com/mmarx/django-account.git@fix-templates#egg=django-account
 psycopg2
 simplejson
 simple_json
