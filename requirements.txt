@@ -1,0 +1,8 @@
+django < 1.8
+django-bootstrap-form
+django-account
+django-extensions
+git+https://github.com/mmarx/django-urlauth.git@fix-simplejson#egg=django-urlauth
+psycopg2
+simplejson
+simple_json
