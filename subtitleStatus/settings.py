@@ -31,6 +31,8 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Redirect after login
+LOGIN_REDIRECT_URL = '/'
 
 # Application definition
 
