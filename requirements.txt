@@ -5,4 +5,5 @@ git+https://github.com/mmarx/django-urlauth.git@fix-simplejson#egg=django-urlaut
 git+https://github.com/mmarx/django-account.git@fix-templates#egg=django-account
 psycopg2
 simplejson
-simple_json
+lxml
+twitter
