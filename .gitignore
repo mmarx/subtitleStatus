@@ -71,8 +71,13 @@ andi-temp/*
 # Credentials files
 credentials.py
 
+
 # Stuff
 temp.py
 test.py
 subtitles.dot
 subtitles.png
+
+# temporaries
+*~
+flycheck_*.py
