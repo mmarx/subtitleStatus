@@ -70,3 +70,7 @@ andi-temp/*
 
 # Credentials files
 credentials.py
+
+# temporaries
+*~
+flycheck_*.py
