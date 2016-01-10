@@ -73,6 +73,7 @@ barbara-temp/
 # Credentials files
 credentials.py
 
+
 # Stuff
 temp.py
 test.py
@@ -91,3 +92,6 @@ subtitles_sync_folder
 subtitles_sync_folder/*
 subtitleStatus/subtitleStauts.cfg
 .secret
+# temporaries
+*~
+flycheck_*.py
