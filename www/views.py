@@ -4,12 +4,15 @@ from www.models import Event, Talk, Subtitle, Language
 from www.forms import SubtitleForm
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import MultipleObjectsReturned
+from django.views.decorators.http import require_POST, require_safe
+from django.shortcuts import get_object_or_404
 from django.contrib import messages
 import datetime
 #from copy import deepcopy
 
 # Create your views here.
 
+@require_safe
 def start(request):
     try:
         my_events = list(Event.objects.all().order_by("-start"))     
@@ -46,6 +49,8 @@ def start(request):
     
     return render(request, "www/main.html", {"events" : my_events} )
 
+
+@require_safe
 def event (request, event_acronym, *args, **kwargs):
     try:
         my_event = Event.objects.select_related('Event_Days','Talk','Language','Subtitle','Rooms').get(acronym = event_acronym)
@@ -204,7 +209,8 @@ Für den Fall ohne Quality check wäre es:
     return
 
 
-def talk (request, talk_id):
+@require_safe
+def talk(request, talk_id):
     try:
         my_talk = Talk.objects.get(pk=talk_id)
         my_subtitles = my_talk.subtitle_set.all().order_by("-is_original_lang","language__lang_amara_short")
@@ -239,13 +245,18 @@ def talk (request, talk_id):
     return render(request, "www/talk.html", {"talk" : my_talk, "subtitles": my_subtitles} )
 
 
+@require_POST
+def addThanks(_, subtitle_id):
+    sub = get_object_or_404(Subtitle, pk=subtitle_id)
+
+    sub.thanks += 1
+    sub.save()
+
+    return redirect(sub.talk)
 
 
 def updateSubtitle(request, subtitle_id):
-    try:
-        my_obj = Subtitle.objects.get(pk=subtitle_id)
-    except ObjectDoesNotExist:
-        raise Http404
+    my_obj = get_object_or_404(Subtitle, pk=subtitle_id)
 
     form = SubtitleForm(request.POST or None, instance=my_obj)
     print(request.POST)
@@ -276,16 +287,16 @@ def updateSubtitle(request, subtitle_id):
 
         my_obj.save()
         messages.add_message(request, messages.INFO, 'Step finished.')
-        return redirect('talk', talk_id=talk.pk)
+        return redirect(talk)
     elif form.is_valid():
         form.save()
         # do stuff
         my_obj.save()
         messages.add_message(request, messages.INFO, 'Subtitle Status is saved.')
-        return redirect('talk', talk_id=my_obj.talk.pk)
+        return redirect(my_obj.talk)
     else:
         messages.add_message(request, messages.WARNING, 'You entered invalid data.')
-        return redirect('talk', talk_id=my_obj.talk.pk)
+        return redirect(my_obj.talk)
 
 
 

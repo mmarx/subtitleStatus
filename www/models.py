@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from django.db import models
+from django.core.urlresolvers import reverse
 
 # Create your models here.
 
@@ -43,6 +44,9 @@ class Event(BasisModell):
         with open("data/eventxml/{}.xml".format(id),'rb') as f:
             savedXML = f.read()
             return savedXML == xmlFile.data
+
+    def get_absolute_url(self):
+        return reverse('event', args=[self.id])
 
 
 # Tage die zu einem Event zugeordnet sind
@@ -146,6 +150,9 @@ class Talk(BasisModell):
         except:
             return None
 
+    def get_absolute_url(self):
+        return reverse('talk', args=[self.id])
+
 class States(BasisModell):
     state_de = models.CharField(max_length = 100)
     state_en = models.CharField(max_length = 100)
@@ -174,6 +181,7 @@ class Subtitle(BasisModell):
     tweet_autosync_done = models.BooleanField(default = False)
     #comment = models.TextField(default = "")
     last_changed_on_amara = models.DateTimeField(default = datetime.min, blank = True)
+    thanks = models.PositiveSmallIntegerField(default = 0)
 
     @property
     def transcription_in_progress(self):
