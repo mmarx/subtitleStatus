@@ -24,7 +24,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
 
-from www.models import Talk, Links, Tracks, Type_of, Speaker, Event, Event_Days, Rooms, Language, Subtitle, States
+from www.models import Talk, Links, Tracks, Type_of, Speaker, Event, Event_Days, Rooms, Language, Subtitle, States, Talk_Persons
 
 
 # Var for all urls in the database in the Event-model
@@ -468,24 +468,24 @@ def save_talk_data ():
     my_talk.guid = talk_guid
     if (talk_optout=="true"):
         my_talk.blacklisted = True
-    
+
     my_talk.day = my_day
     my_talk.event = my_event
-    
+
     my_talk.save()
-    
+
     # Prepare to save links
     my_links = []
     my_link = []
     # Saving the links
     for some_link in talk_links:
         my_link = Links.objects.get_or_create(url = some_link[0], title = some_link[1], talk = my_talk)
-    
+
     for any_person in my_persons:
-        my_talk.persons.add(any_person)
-        
-    
-    
+        Talk_Persons.objects.create(talk=my_talk, speaker=any_person)
+
+
+
 #===============================================================================
 # Main
 #===============================================================================
