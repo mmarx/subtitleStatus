@@ -64,8 +64,11 @@ class Event(BasisModell):
             if this[1]:
                 this[0].recalculate_statistics = True
                 this[0].save()
-                
-                
+
+    @property
+    def page_sub_titles(self):
+        return [self.acronym]
+
 # Days which belong to an event
 class Event_Days(BasisModell):
     event = models.ForeignKey(Event)
@@ -149,7 +152,11 @@ class Speaker(BasisModell):
         if time == 0:
             return None
         return strokes * 60.0 / time
-    
+
+    @property
+    def page_sub_titles(self):
+        return ['Speakers', self.name]
+
 # Talk with all its data
 class Talk(BasisModell):
     frab_id_talk = models.PositiveSmallIntegerField(default = -1)
@@ -317,7 +324,10 @@ class Talk(BasisModell):
             return True
         else:
             return False
-    
+
+    @property
+    def page_sub_titles(self):
+        return self.event.page_sub_titles + [self.title]
 
 # States for every subtitle like "complete" or "needs sync"
 class States(BasisModell):

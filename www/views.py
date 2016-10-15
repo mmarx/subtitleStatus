@@ -64,7 +64,8 @@ def event (request, event_acronym, *args, **kwargs):
         "my_event" : my_event,
         "my_days" : my_event.event_days_set.all(),
         "my_langs" : my_langs,
-        "talks_chunk" : talks_chunk} )
+        "talks_chunk" : talks_chunk,
+        "page_sub_titles" : my_event.page_sub_titles} )
 
 # Form to save the progress of a subtitle
 def get_subtitle_form(request, talk, sub):
@@ -154,7 +155,11 @@ def talk(request, talk_id):
       
     speakers_in_talk_statistics = Talk_Persons.objects.filter(talk = my_talk)
 
-    return render(request, "www/talk.html", {"talk" : my_talk, "subtitles": my_subtitles,  "talk_speakers_statistics": speakers_in_talk_statistics} ) #"speakers": my_speakers,
+    return render(request, "www/talk.html",
+                  {"talk": my_talk,
+                   "subtitles": my_subtitles,
+                   "talk_speakers_statistics": speakers_in_talk_statistics,
+                   "page_sub_titles": my_talk.page_sub_titles} ) #"speakers": my_speakers,
 
 
 def talk_by_frab(request, frab_id):
@@ -224,8 +229,10 @@ def speaker(request, speaker_id):
     # If the speaker has an doppelgaenger, do a redirect to this site
     if my_speaker.doppelgaenger_of is not None :
         return redirect('speaker', speaker_id = my_speaker.doppelgaenger_of.id)
-    
-    return render(request, "www/speaker.html", {"speaker" : my_speaker} )
+
+    return render(request, "www/speaker.html",
+                  {"speaker": my_speaker,
+                   "page_sub_titles": my_speaker.page_sub_titles} )
 
 def eventCSS(request, event):
     return render(request, "css/{}".format(event.lower()))
