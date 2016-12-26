@@ -5,4 +5,3 @@ git+https://github.com/mmarx/django-urlauth.git@fix-urlencode#egg=django-urlauth
 git+https://github.com/mmarx/django-account.git@fix-py3k#egg=django-account
 psycopg2
 simplejson
-simple_json
