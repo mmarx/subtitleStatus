@@ -2,12 +2,30 @@
 
 from datetime import datetime
 from django.db import models
-from django.db.models import Sum, Q
+from django.db.models import Sum, F, Q, Lookup
+from django.db.models.fields import Field
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django_filters import FilterSet
+from django_filters import FilterSet, ModelChoiceFilter
 from .statistics_helper import *
 import json
+
+
+@Field.register_lookup
+class OriginalLanguageSubtitleStateLookup(Lookup):
+    lookup_name = 'original_language_status'
+
+    def as_sql(self, compiler, connection):
+        lhs, lhs_params = self.process_lhs(compiler, connection)
+        rhs, rhs_params = self.process_rhs(compiler, connection)
+        params = lhs_params + rhs_params
+        return '''%s IN (
+        SELECT talk_id
+        FROM www_subtitle
+        WHERE state_id = %s
+        AND is_original_lang = TRUE
+        )''' % (lhs, rhs), params
+
 
 # Basic model which provides a field for the creation and the last change timestamp
 class BasisModell(models.Model):
@@ -495,11 +513,17 @@ class Talk(BasisModell):
 
 
 class TalkFilter(FilterSet):
+    day = ModelChoiceFilter(queryset=lambda request: request.event.event_days_set.all())
+    room = ModelChoiceFilter(queryset=lambda request: request.event.talk_set.values('room').distinct())
+    orig_language = ModelChoiceFilter(queryset=lambda request: request.event.talk_set.values('orig_language').distinct())
+
     class Meta:
         model = Talk
-        fields = ['day', 'room', 'orig_language',]
-            # 'state': [],
-            # 'changes': [],
+        fields = {'day': ['exact'],
+                  'room': ['exact'],
+                  'orig_language': ['exact'],
+                  'id': ['original_language_status'],
+        }
 
 
 # States for every subtitle like "complete" or "needs sync"
