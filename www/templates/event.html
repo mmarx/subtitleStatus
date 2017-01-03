@@ -38,6 +38,11 @@
 </div>
 {% include "progress_bar_original.html" with value=my_event %}
 
+<form action="" method="get">
+  {{ filter.form }}
+  <input type="submit">
+</form>
+
 <div class="btn-group" role="group" aria-label="Filter by event day">
     {% for day in my_days %}
          <a href= "/event/{{my_event.acronym}}/day/{{day.index}}"><button type="button" class="btn btn-default">Day {{day.index}}</button></a>

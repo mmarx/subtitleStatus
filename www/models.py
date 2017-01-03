@@ -17,6 +17,9 @@ from .statistics_helper import calculate_seconds_from_time, calculate_time_delta
 from .amara_api_helper import get_uploaded_urls, make_uploaded_url_primary, remove_url_from_amara, check_if_url_on_amara, update_amara_urls, read_links_from_amara, create_and_store_amara_key
 from .trint_api_helper import get_trint_transcript_via_api
 
+from django_filters import FilterSet
+from .statistics_helper import *
+
 import json
 import requests
 import credentials as cred
@@ -1014,6 +1017,15 @@ class Talk(BasisModell):
     """
     def __str__(self):
         return self.title
+
+
+class TalkFilter(FilterSet):
+    class Meta:
+        model = Talk
+        fields = ['day', 'room', 'orig_language',]
+            # 'state': [],
+            # 'changes': [],
+
 
 
 # States for every subtitle like "complete" or "needs sync"

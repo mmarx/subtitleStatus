@@ -1,5 +1,7 @@
 ﻿from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, Http404
+from www.models import Event, Talk, Subtitle, Language, Speaker, Talk_Persons, Statistics_Event, Statistics_Speaker, Event_Days, TalkFilter
+from www.forms import SubtitleForm
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import MultipleObjectsReturned
 from django.shortcuts import get_object_or_404, redirect
@@ -52,9 +54,11 @@ def event(request, acronym, day=0, language=None):
             "date",
             "start",
             "room__room")
+
         original_languages = [lang['orig_language']
                           for lang in my_talks.values('orig_language')]
     else:
+        f = TalkFilter(request.GET, queryset=my_event.talk_set.filter(unlisted=False))
         my_talks = my_event.talk_set.filter(unlisted=False).order_by(
             "day",
             "date",
@@ -72,6 +76,8 @@ def event(request, acronym, day=0, language=None):
         my_talks = my_talks.filter(day__index=day)
     if language:
         my_talks = my_talks.filter(orig_language__lang_amara_short=language)
+
+    my_talks = f.qs
     my_event.__dict__.update(progress_bar_for_talks(my_talks))
 
     for talk in my_talks:
@@ -90,6 +96,7 @@ def event(request, acronym, day=0, language=None):
                    "talks_chunk": talks_chunk,
                    "request": request,
                    "datetime_min": datetime.datetime.min,
+                   "filter": f
                   })
 
 # Form to save the progress of a subtitle
