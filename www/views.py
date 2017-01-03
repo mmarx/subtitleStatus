@@ -1,6 +1,6 @@
 ﻿from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, Http404
-from www.models import Event, Talk, Subtitle, Language, Speaker, Talk_Persons, Statistics_Event, Statistics_Speaker, Event_Days
+from www.models import Event, Talk, Subtitle, Language, Speaker, Talk_Persons, Statistics_Event, Statistics_Speaker, Event_Days, TalkFilter
 from www.forms import SubtitleForm
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import MultipleObjectsReturned
@@ -39,6 +39,7 @@ def start(request):
 def event (request, event_acronym, *args, **kwargs):
     try:
         my_event = Event.objects.prefetch_related('event_days_set','talk_set').get(acronym = event_acronym)
+        f = TalkFilter(request.GET, queryset=my_event.talk_set.filter(blacklisted=False))
         my_talks = my_event.talk_set.filter(blacklisted = False).order_by("day",
             "date",
             "start",
@@ -51,6 +52,7 @@ def event (request, event_acronym, *args, **kwargs):
             lang = kwargs.pop("lang")
             my_talks = my_talks.filter(orig_language__lang_amara_short = lang)
 
+        my_talks = f.qs
         my_event.__dict__.update(progress_bar_for_talks(my_talks))
 
         for every_talk in my_talks:
@@ -69,7 +71,9 @@ def event (request, event_acronym, *args, **kwargs):
         "my_langs" : my_langs,
         "page_sub_titles": my_event.page_sub_titles,
         "talks_chunk" : talks_chunk,
-        "request": request} )
+        "request": request,
+        "filter": f,
+    } )
 
 # Form to save the progress of a subtitle
 def get_subtitle_form(request, talk, sub):

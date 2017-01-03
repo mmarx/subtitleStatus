@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models import Sum, Q
 from django.core.urlresolvers import reverse
 from django.db import transaction
+from django_filters import FilterSet
 from .statistics_helper import *
 import json
 
@@ -491,6 +492,15 @@ class Talk(BasisModell):
             return False
         else:
             return True
+
+
+class TalkFilter(FilterSet):
+    class Meta:
+        model = Talk
+        fields = ['day', 'room', 'orig_language',]
+            # 'state': [],
+            # 'changes': [],
+
 
 # States for every subtitle like "complete" or "needs sync"
 class States(BasisModell):
