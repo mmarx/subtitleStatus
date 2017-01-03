@@ -3,7 +3,8 @@
 from time import sleep
 from datetime import datetime, time, timezone, timedelta
 from django.db import models, transaction
-from django.db.models import Sum, Q
+from django.db.models import Sum, F, Q, Lookup
+from django.db.models.fields import Field
 from django.urls import reverse
 from django.core.validators import URLValidator
 from django.utils.deconstruct import deconstructible
@@ -17,8 +18,7 @@ from .statistics_helper import calculate_seconds_from_time, calculate_time_delta
 from .amara_api_helper import get_uploaded_urls, make_uploaded_url_primary, remove_url_from_amara, check_if_url_on_amara, update_amara_urls, read_links_from_amara, create_and_store_amara_key
 from .trint_api_helper import get_trint_transcript_via_api
 
-from django_filters import FilterSet
-from .statistics_helper import *
+from django_filters import FilterSet, ModelChoiceFilter
 
 import json
 import requests
@@ -79,6 +79,23 @@ def get_amara_header(cred):
             'X-api-username': cred.AMARA_USER,
             'X-api-key': cred.AMARA_API_KEY,
     }
+
+
+
+@Field.register_lookup
+class OriginalLanguageSubtitleStateLookup(Lookup):
+    lookup_name = 'original_language_status'
+
+    def as_sql(self, compiler, connection):
+        lhs, lhs_params = self.process_lhs(compiler, connection)
+        rhs, rhs_params = self.process_rhs(compiler, connection)
+        params = lhs_params + rhs_params
+        return '''%s IN (
+        SELECT talk_id
+        FROM www_subtitle
+        WHERE state_id = %s
+        AND is_original_lang = TRUE
+        )''' % (lhs, rhs), params
 
 
 # Basic model which provides a field for the creation and the last change timestamp
@@ -1020,11 +1037,17 @@ class Talk(BasisModell):
 
 
 class TalkFilter(FilterSet):
+    day = ModelChoiceFilter(queryset=lambda request: request.event.event_days_set.all())
+    room = ModelChoiceFilter(queryset=lambda request: request.event.talk_set.values('room').distinct())
+    orig_language = ModelChoiceFilter(queryset=lambda request: request.event.talk_set.values('orig_language').distinct())
+
     class Meta:
         model = Talk
-        fields = ['day', 'room', 'orig_language',]
-            # 'state': [],
-            # 'changes': [],
+        fields = {'day': ['exact'],
+                  'room': ['exact'],
+                  'orig_language': ['exact'],
+                  'id': ['original_language_status'],
+        }
 
 
 
