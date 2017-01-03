@@ -1,4 +1,4 @@
-django < 1.8
+django == 1.8.5
 django-bootstrap-form
 django-extensions
 git+https://github.com/mmarx/django-urlauth.git@fix-urlencode#egg=django-urlauth
