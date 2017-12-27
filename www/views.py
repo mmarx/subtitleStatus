@@ -16,7 +16,7 @@ import datetime
 # Start of the Website with all the events
 def start(request):
     try:
-        my_events = list(Event.objects.all().order_by("-start"))     
+        my_events = list(Event.objects.all().order_by("-start"))
 
         # Function for the progress bars
         for every_event in my_events:
@@ -59,7 +59,7 @@ def event (request, event_acronym, *args, **kwargs):
         # Create cunk for the 3 columns display of talks on event page
         talks_per_line = 3
         talks_chunk = [my_talks[x:x+talks_per_line] for x in range(0, len(my_talks), talks_per_line)]
-        
+
     except ObjectDoesNotExist:
         raise Http404
 
@@ -151,7 +151,7 @@ def talk(request, talk_id):
     my_subtitles = my_talk.subtitle_set.all().order_by("-is_original_lang","language__lang_amara_short")
     for s in my_subtitles:
         s.form = get_subtitle_form(request, my_talk, s)
-      
+
     speakers_in_talk_statistics = Talk_Persons.objects.filter(talk = my_talk)
 
     return render(request, "www/talk.html",
@@ -227,7 +227,7 @@ def updateSubtitle(request, subtitle_id):
 def eventStatus(request, event):
     return render(request, 'status', {'eventname':event})
 
-    
+
 # Speaker summary website
 def speaker(request, speaker_id):
     # Check if the Speaker ID exists, if not return a 404
@@ -235,9 +235,9 @@ def speaker(request, speaker_id):
     # If the speaker has an doppelgaenger, do a redirect to this site
     if my_speaker.doppelgaenger_of is not None :
         return redirect('speaker', speaker_id = my_speaker.doppelgaenger_of.id)
-    
+
     my_talk_persons = Talk_Persons.objects.filter(speaker = my_speaker).order_by("-talk__date").select_related('talk', 'speaker').prefetch_related('talk__subtitle_set')
-    
+
     my_speakers_statistics = Statistics_Speaker.objects.filter(speaker = my_speaker) \
         .exclude(average_wpm = None, average_spm = None) \
         .order_by("language__language_en")
@@ -271,7 +271,7 @@ def speaker(request, speaker_id):
             first_flag = False
         else:
             my_events += ", " + any
-    
+
     # All tracks the speaker spoke in
     my_tracks = ""
     first_flag = True
@@ -281,7 +281,7 @@ def speaker(request, speaker_id):
             first_flag = False
         else:
             my_tracks += ", " + any
-    
+
     # Get all languages the speaker spoke in and convert to a string with commas
     first_flag = True
     my_languages = ""
@@ -291,11 +291,11 @@ def speaker(request, speaker_id):
             first_flag = False
         else:
             my_languages += ", " + any
-      
+
     # Get all non blacklisted talks from the speaker
     my_talks = my_speaker.talk_set.all()
     my_talks = my_talks.filter(blacklisted = False).order_by("-date").prefetch_related("talk_persons_set")
-      
+
     # Create talk_chunks of 3 per line
     talks_per_line = 3
     my_talks_chunk = [my_talks[x:x+talks_per_line] for x in range(0, my_talks.count(), talks_per_line)]
@@ -391,10 +391,10 @@ def statistics_speakers_in_talks(request):
     my_talk_persons = Talk_Persons.objects.all().exclude(average_wpm = None).order_by("-average_spm")
     return render(request, "www/statistics_speakers_in_talks.html",
         {"talk_persons" : my_talk_persons})
-        
+
 # Test-View
 def test(request):
-    
+
     if request.method == "POST":
         form = TestForm(request.POST)
         if form.is_valid():
@@ -420,8 +420,8 @@ def test(request):
             pass
         else:
             event_days[any.index] = 0
-    
-    
+
+
     return render(request, "www/test.html",
         {"talk_persons" : my_talk_persons,
         "my_langs" : my_langs,
@@ -431,3 +431,16 @@ def test(request):
         "sort_desc" : sort_desc,
         "form" : form}
         )
+
+
+# master control panel for subtitles
+def subtitleControl(request, subtitle_id):
+    subtitle = get_object_or_404(Subtitle, pk=subtitle_id)
+    form = get_subtitle_form(request, subtitle.talk, subtitle)
+
+    return render(request, "www/mcp_sub.html",
+                  { "subtitle": subtitle,
+                    "form": form})
+
+def doSubtitleControl(request, st, state):
+    subtitle = get_object_or_404

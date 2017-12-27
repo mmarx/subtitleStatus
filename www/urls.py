@@ -21,8 +21,9 @@ urlpatterns = patterns('',
         url(r'^statistics/talks/$',views.statistics_talks),
         url(r'^statistics/speakers/$',views.statistics_speakers),
         url(r'^statistics/speakers_in_talks/$',views.statistics_speakers_in_talks),
+        url(r'^master-control/subtitle/(?P<subtitle_id>\d+)/$', views.subtitleControl, name='subtitle'),
 )
+
 if settings.DEBUG:
     urlpatterns += patterns('django.contrib.staticfiles.views',
         url(r'^static/(?P<path>.*)$','serve'))
-        
