@@ -472,62 +472,6 @@ def save_talk_data ():
     my_talk = []
 
     my_talk = Talk.objects.get_or_create(frab_id_talk = talk_frab_id)[0]
-<<<<<<< HEAD
-    if my_talk.room != my_room:
-        my_talk.room = my_room
-        my_talk.save()
-    if my_talk.track != my_track:
-        my_talk.track = my_track
-        my_talk.save()
-    if my_talk.type_of != my_type:
-        my_talk.type_of = my_type
-        my_talk.save()
-    if my_talk.orig_language != my_language:
-        my_talk.orig_language = my_language
-        my_talk.save()
-    if my_talk.date != dateutil.parser.parse(talk_date):
-        my_talk.date = talk_date
-        my_talk.save()
-    if my_talk.start != dateutil.parser.parse(talk_start).time():
-        my_talk.start = talk_start
-        my_talk.save()
-    if my_talk.duration != dateutil.parser.parse(talk_duration).time():
-        my_talk.duration = talk_duration
-        my_talk.save()
-    if my_talk.slug != talk_slug:
-        my_talk.slug = talk_slug
-        my_talk.save()
-    if my_talk.title != talk_title:
-        my_talk.title = talk_title
-        my_talk.save()
-    if my_talk.subtitle_talk != talk_subtitle:
-        my_talk.subtitle_talk = talk_subtitle
-        my_talk.save()
-    if my_talk.abstract != talk_abstract:
-        my_talk.abstract = talk_abstract
-        my_talk.save()
-    if my_talk.description != talk_description:
-        my_talk.description = talk_description
-        my_talk.save()
-    if my_talk.guid != talk_guid:
-        my_talk.guid = talk_guid
-        my_talk.save()
-    if my_talk.blacklisted != True:
-        if (talk_optout=="true"):
-            my_talk.blacklisted = True
-            my_talk.save()
-    if my_talk.blacklisted == True:
-        if (talk_optout != "true"):
-            my_talk.blacklisted = False
-            my_talk.save()
-    if my_talk.day != my_day:
-        my_talk.day = my_day
-        my_talk.save()
-    if my_talk.event != my_event:
-        my_talk.event = my_event
-        my_talk.save()
-
-=======
     my_talk.room = my_room
     my_talk.track = my_track
     my_talk.type_of = my_type
@@ -549,7 +493,6 @@ def save_talk_data ():
 
     my_talk.save()
 
->>>>>>> Fix initial data set for updated models
     # Prepare to save links
     my_links = []
     my_link = []
@@ -558,17 +501,9 @@ def save_talk_data ():
         my_link = Links.objects.get_or_create(url = some_link[0], title = some_link[1], talk = my_talk)
 
     for any_person in my_persons:
-<<<<<<< HEAD
-        this_talk_persons, created = Talk_Persons.objects.get_or_create(talk = my_talk, speaker = any_person)
-        #this_talk_persons.save()
-
-
-=======
         Talk_Persons.objects.create(talk=my_talk, speaker=any_person)
 
 
-
->>>>>>> Fix initial data set for updated models
 #===============================================================================
 # Main
 #===============================================================================
