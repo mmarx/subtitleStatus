@@ -1,1 +1,13 @@
-{{form}}
+{% extends "base.html" %}
+{% load bootstrap %}
+
+{% block title %}C3Subtitles -- Master Control Program{% endblock %}
+
+{% block content %}
+<div>
+  <form class="form" id="form_{{ subtitle.pk }}" action="/master-control/subtitle/{{subtitle.pk}}/update" method="POST">
+    {{ form|bootstrap }}
+	<input class="btn btn-default btn-save" type="button" data-toggle="modal" data-target="#accept_{{ subtitle.pk }}"  value="{{form.quick_btn}}">
+  </form>
+</div>
+{% endblock %}
