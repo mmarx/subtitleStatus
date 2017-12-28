@@ -35,4 +35,4 @@ if __name__ == '__main__':
     if odd:
         chunks.append(transcript[-1])
 
-    print("\n".join(chunks).replace("\n\n\n", "\n\n"))
+    print("\n".join(chunks).replace("\n\n\n", "\n\n").strip())
