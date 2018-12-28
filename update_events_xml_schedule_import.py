@@ -396,12 +396,7 @@ def read_xml_and_save_to_database():
 
                 # Write event/talk data to database
                 save_talk_data()
-<<<<<<< HEAD
 
-=======
-
-
->>>>>>> Fix initial data set for updated models
                 counter_event += 1
             counter_room +=1
         counter_day += 1
