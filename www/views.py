@@ -1,6 +1,6 @@
 ﻿from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, Http404
-from www.models import Event, Talk, Subtitle, Language, Speaker, Talk_Persons, Statistics_Event, Statistics_Speaker, Event_Days, TalkFilter
+from www.models import Event, Talk, Subtitle, Language, Speaker, Talk_Persons, Statistics_Event, Statistics_Speaker, Event_Days
 from www.forms import SubtitleForm
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import MultipleObjectsReturned
@@ -58,7 +58,7 @@ def event(request, acronym, day=0, language=None):
         original_languages = [lang['orig_language']
                           for lang in my_talks.values('orig_language')]
     else:
-        f = TalkFilter(request.GET, queryset=my_event.talk_set.filter(unlisted=False))
+        f = my_event.talks_filter(request.GET, queryset=my_event.talk_set.filter(unlisted=False))
         my_talks = my_event.talk_set.filter(unlisted=False).order_by(
             "day",
             "date",

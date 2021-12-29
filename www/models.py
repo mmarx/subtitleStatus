@@ -18,7 +18,8 @@ from .statistics_helper import calculate_seconds_from_time, calculate_time_delta
 from .amara_api_helper import get_uploaded_urls, make_uploaded_url_primary, remove_url_from_amara, check_if_url_on_amara, update_amara_urls, read_links_from_amara, create_and_store_amara_key
 from .trint_api_helper import get_trint_transcript_via_api
 
-from django_filters import FilterSet, ModelChoiceFilter
+from django_filters import FilterSet, ModelChoiceFilter, ChoiceFilter
+from django_filters.fields import ModelChoiceField
 
 import json
 import requests
@@ -268,6 +269,26 @@ class Event(BasisModell):
 
     def __str__(self):
         return self.acronym
+
+    def talks_filter(self, *args, **kwargs):
+        rooms = [(room.id, room.room) for room in Rooms.objects.filter(talk__event__pk=self.id).distinct()]
+        languages = [(lang.id, lang.display_name) for lang in Language.objects.filter(talk__event__pk=self.id).distinct()]
+        states = [(status.id, status.state_en) for status in States.objects.all()]
+
+        class TalkFilter(FilterSet):
+            day = ModelChoiceFilter(queryset=self.event_days_set.all())
+            room = ChoiceFilter(choices=rooms)
+            orig_language = ChoiceFilter(choices=languages)
+            id = ChoiceFilter(
+                choices=states,
+                lookup_expr='original_language_status',
+                )
+
+            class Meta:
+                model = Talk
+                fields = ()
+
+        return TalkFilter(*args, **kwargs)
 
 
 # Days which belong to an event
@@ -1036,41 +1057,6 @@ class Talk(BasisModell):
         return self.title
 
 
-def event_days(request):
-    if request is None:
-        return Event_Days.objects.none()
-    event = request.event
-    return event.event_days_set.all()
-
-
-def event_rooms(request):
-    if request is None:
-        return Rooms.objects.none()
-    event = request.event
-    return event.talk_set.values('room').distinct()
-
-def event_original_languages(request):
-    if request is None:
-        return Language.objects.none()
-    event = request.event
-    return event.talk_set.values('orig_language').distinct()
-
-
-class TalkFilter(FilterSet):
-    day = ModelChoiceFilter(queryset=event_days)
-    room = ModelChoiceFilter(queryset=event_rooms)
-    orig_language = ModelChoiceFilter(queryset=event_original_languages)
-
-    class Meta:
-        model = Talk
-        fields = {'day': ['exact'],
-                  'room': ['exact'],
-                  'orig_language': ['exact'],
-                  'id': ['original_language_status'],
-        }
-
-
-
 # States for every subtitle like "complete" or "needs sync"
 class States(BasisModell):
     state_de = models.CharField(max_length = 100)
@@ -1687,3 +1673,5 @@ class Talk_Persons(BasisModell):
             return True
         else:
             return False
+
+
