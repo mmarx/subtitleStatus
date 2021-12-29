@@ -38,10 +38,12 @@
 </div>
 {% include "progress_bar_original.html" with value=my_event %}
 
-<form action="" method="get">
+{% if my_event.id != 20 %}
+<form method="get">
   {{ filter.form }}
   <input type="submit">
 </form>
+{% endif %}
 
 <div class="btn-group" role="group" aria-label="Filter by event day">
     {% for day in my_days %}

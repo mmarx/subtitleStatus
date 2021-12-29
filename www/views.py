@@ -56,9 +56,8 @@ def event(request, acronym, day=0, language=None):
             "room__room")
 
         original_languages = [lang['orig_language']
-                          for lang in my_talks.values('orig_language')]
+                              for lang in my_talks.values('orig_language')]
     else:
-        f = my_event.talks_filter(request.GET, queryset=my_event.talk_set.filter(unlisted=False))
         my_talks = my_event.talk_set.filter(unlisted=False).order_by(
             "day",
             "date",
@@ -71,6 +70,9 @@ def event(request, acronym, day=0, language=None):
         my_talks = my_talks.all().exclude(
             video_duration="00:00:00"
         ).exclude(amara_key="").exclude(filename="")
+
+    f = my_event.talks_filter(request.GET, queryset=my_talks)
+
     my_langs = Language.objects.filter(pk__in=original_languages)
     if day > 0:
         my_talks = my_talks.filter(day__index=day)
