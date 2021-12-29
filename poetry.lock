@@ -141,6 +141,17 @@ python-versions = ">=3.6"
 Django = ">=2.2"
 
 [[package]]
+name = "django-filter"
+version = "21.1"
+description = "Django-filter is a reusable Django application for allowing users to filter querysets dynamically."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+Django = ">=2.2"
+
+[[package]]
 name = "django-pglocks"
 version = "1.0.4"
 description = "django_pglocks provides useful context managers for advisory locks for PostgreSQL."
@@ -176,7 +187,7 @@ doc = ["sphinx", "sphinx-rtd-theme", "sphinxcontrib-spelling"]
 
 [[package]]
 name = "faker"
-version = "11.0.0"
+version = "11.1.0"
 description = "Faker is a Python package that generates fake data for you."
 category = "main"
 optional = false
@@ -523,7 +534,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "00ebed35a2ff3648c267e11866cde0bd8b2349e504ff95f46054c74de4b1aa32"
+content-hash = "0c9a71b4b4774599d97bb9e229701e3d5b8f2afea1f3dd4db34a73233fedb843"
 
 [metadata.files]
 asgiref = [
@@ -643,6 +654,10 @@ django-extensions = [
     {file = "django-extensions-3.1.5.tar.gz", hash = "sha256:28e1e1bf49f0e00307ba574d645b0af3564c981a6dfc87209d48cb98f77d0b1a"},
     {file = "django_extensions-3.1.5-py3-none-any.whl", hash = "sha256:9238b9e016bb0009d621e05cf56ea8ce5cce9b32e91ad2026996a7377ca28069"},
 ]
+django-filter = [
+    {file = "django-filter-21.1.tar.gz", hash = "sha256:632a251fa8f1aadb4b8cceff932bb52fe2f826dd7dfe7f3eac40e5c463d6836e"},
+    {file = "django_filter-21.1-py3-none-any.whl", hash = "sha256:f4a6737a30104c98d2e2a5fb93043f36dd7978e0c7ddc92f5998e85433ea5063"},
+]
 django-pglocks = [
     {file = "django-pglocks-1.0.4.tar.gz", hash = "sha256:3c47c66fbfbd268ef46269673a0516a039539b0972b8ed2ec9cfee44c4b65523"},
 ]
@@ -654,8 +669,8 @@ factory-boy = [
     {file = "factory_boy-3.2.1.tar.gz", hash = "sha256:a98d277b0c047c75eb6e4ab8508a7f81fb03d2cb21986f627913546ef7a2a55e"},
 ]
 faker = [
-    {file = "Faker-11.0.0-py3-none-any.whl", hash = "sha256:8a90e8b015d9e2f5556293d817c3711481ca288b28b94f55ad6327cdc2cfdaad"},
-    {file = "Faker-11.0.0.tar.gz", hash = "sha256:5bb6a3decfa08fa7d86691d3b6d48482d5fcfb4ccf24990c7ddced74c77c9b4b"},
+    {file = "Faker-11.1.0-py3-none-any.whl", hash = "sha256:ee29deb5174a8bd2e3a1be2f43d9505201d267d383a97ebc67715d12bb386e47"},
+    {file = "Faker-11.1.0.tar.gz", hash = "sha256:89c359e153f6a27820ff1d491e851018064dd65731f7894e226f93e2aa980655"},
 ]
 google-api-python-client = [
     {file = "google-api-python-client-1.4.2.tar.gz", hash = "sha256:2cd7ccc797b0f5d1ef75ea1ebf749da47c4972daf534d22fd3c6b4dfbd9a88ee"},

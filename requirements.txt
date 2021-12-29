@@ -100,6 +100,9 @@ django-bootstrap-form==3.4 \
 django-extensions==3.1.5; python_version >= "3.6" \
     --hash=sha256:28e1e1bf49f0e00307ba574d645b0af3564c981a6dfc87209d48cb98f77d0b1a \
     --hash=sha256:9238b9e016bb0009d621e05cf56ea8ce5cce9b32e91ad2026996a7377ca28069
+django-filter==21.1; python_version >= "3.6" \
+    --hash=sha256:632a251fa8f1aadb4b8cceff932bb52fe2f826dd7dfe7f3eac40e5c463d6836e \
+    --hash=sha256:f4a6737a30104c98d2e2a5fb93043f36dd7978e0c7ddc92f5998e85433ea5063
 django-pglocks==1.0.4 \
     --hash=sha256:3c47c66fbfbd268ef46269673a0516a039539b0972b8ed2ec9cfee44c4b65523
 django-urlauth==0.1.8 \
@@ -110,9 +113,9 @@ django==3.2.10; python_version >= "3.6" \
 factory-boy==3.2.1; python_version >= "3.6" \
     --hash=sha256:eb02a7dd1b577ef606b75a253b9818e6f9eaf996d94449c9d5ebb124f90dc795 \
     --hash=sha256:a98d277b0c047c75eb6e4ab8508a7f81fb03d2cb21986f627913546ef7a2a55e
-faker==11.0.0; python_version >= "3.6" \
-    --hash=sha256:8a90e8b015d9e2f5556293d817c3711481ca288b28b94f55ad6327cdc2cfdaad \
-    --hash=sha256:5bb6a3decfa08fa7d86691d3b6d48482d5fcfb4ccf24990c7ddced74c77c9b4b
+faker==11.1.0; python_version >= "3.6" \
+    --hash=sha256:ee29deb5174a8bd2e3a1be2f43d9505201d267d383a97ebc67715d12bb386e47 \
+    --hash=sha256:89c359e153f6a27820ff1d491e851018064dd65731f7894e226f93e2aa980655
 google-api-python-client==1.4.2 \
     --hash=sha256:2cd7ccc797b0f5d1ef75ea1ebf749da47c4972daf534d22fd3c6b4dfbd9a88ee \
     --hash=sha256:76a3802d3596ea79648d9e1d5b56daadbf09b3de3d413abc6787425753ca692c \
