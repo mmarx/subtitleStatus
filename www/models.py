@@ -1036,10 +1036,30 @@ class Talk(BasisModell):
         return self.title
 
 
+def event_days(request):
+    if request is None:
+        return Event_Days.objects.none()
+    event = request.event
+    return event.event_days_set.all()
+
+
+def event_rooms(request):
+    if request is None:
+        return Rooms.objects.none()
+    event = request.event
+    return event.talk_set.values('room').distinct()
+
+def event_original_languages(request):
+    if request is None:
+        return Language.objects.none()
+    event = request.event
+    return event.talk_set.values('orig_language').distinct()
+
+
 class TalkFilter(FilterSet):
-    day = ModelChoiceFilter(queryset=lambda request: request.event.event_days_set.all())
-    room = ModelChoiceFilter(queryset=lambda request: request.event.talk_set.values('room').distinct())
-    orig_language = ModelChoiceFilter(queryset=lambda request: request.event.talk_set.values('orig_language').distinct())
+    day = ModelChoiceFilter(queryset=event_days)
+    room = ModelChoiceFilter(queryset=event_rooms)
+    orig_language = ModelChoiceFilter(queryset=event_original_languages)
 
     class Meta:
         model = Talk
