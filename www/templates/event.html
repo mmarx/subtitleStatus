@@ -39,7 +39,7 @@
 {% include "progress_bar_original.html" with value=my_event %}
 
 {% if my_event.id != 20 %}
-<form method="get">
+<form class="talks-filter" method="get">
   {{ filter.form }}
   <input type="submit">
 </form>

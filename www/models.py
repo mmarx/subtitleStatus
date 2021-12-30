@@ -17,9 +17,7 @@ from django.utils.timezone import make_aware
 from .statistics_helper import calculate_seconds_from_time, calculate_time_delta, calculate_per_minute, calculate_subtitle, prepare_string_for_word_counts, save_word_dict_as_json, read_word_dict_from_json, merge_word_frequencies_dicts, n_most_common_words
 from .amara_api_helper import get_uploaded_urls, make_uploaded_url_primary, remove_url_from_amara, check_if_url_on_amara, update_amara_urls, read_links_from_amara, create_and_store_amara_key
 from .trint_api_helper import get_trint_transcript_via_api
-
-from django_filters import FilterSet, ModelChoiceFilter, ChoiceFilter
-from django_filters.fields import ModelChoiceField
+from .filters import make_talk_filter
 
 import json
 import requests
@@ -271,24 +269,7 @@ class Event(BasisModell):
         return self.acronym
 
     def talks_filter(self, *args, **kwargs):
-        rooms = [(room.id, room.room) for room in Rooms.objects.filter(talk__event__pk=self.id).distinct()]
-        languages = [(lang.id, lang.display_name) for lang in Language.objects.filter(talk__event__pk=self.id).distinct()]
-        states = [(status.id, status.state_en) for status in States.objects.all()]
-
-        class TalkFilter(FilterSet):
-            day = ModelChoiceFilter(queryset=self.event_days_set.all())
-            room = ChoiceFilter(choices=rooms)
-            orig_language = ChoiceFilter(choices=languages)
-            id = ChoiceFilter(
-                choices=states,
-                lookup_expr='original_language_status',
-                )
-
-            class Meta:
-                model = Talk
-                fields = ()
-
-        return TalkFilter(*args, **kwargs)
+        return make_talk_filter(self, *args, **kwargs)
 
 
 # Days which belong to an event
